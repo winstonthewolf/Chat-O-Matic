@@ -44,47 +44,44 @@ public class ChatServer extends Application {
         primaryStage.setTitle("Server");
         primaryStage.setScene(scene);
         primaryStage.show();
+        System.out.println("Showing now");
 
-        new Thread(()-> {
+        new Thread(()->{
             try {
                 ServerSocket serverSocket = new ServerSocket(8000);
-                Platform.runLater(()->
-                        ta.appendText("Server started at "+ new Date() + '\n'));
-
+                //Surround with if statement for if serversocket is successful.
+                Platform.runLater(()-> {
+                    ta.appendText("Server started at "+ new Date() + '\n');
+                });
                 Socket socket = serverSocket.accept();
+                tf.setOnAction(e -> {
+                    try {
 
-                DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
-                DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
+                        DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
+                        String messageFromServer = tf.getText();
+                        outputToClient.writeUTF(messageFromServer);
+                        outputToClient.flush();
+                        Platform.runLater(() -> {
+                            ta.appendText("Server: " + messageFromServer+"\n");
+                        });
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
 
-                //BufferedReader outputFromServer = new BufferedReader(new InputStreamReader(tf.getText()));
-
+                });
+                //IMPORTANT FOR TOMORROW: How do I implement DataInputStream so that I am able to use readUTF from a different thread.
                 while(true) {
+                    DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
                     String message = inputFromClient.readUTF();
                     //outputToClient.writeUTF(message);
                     Platform.runLater(() -> {
                         ta.appendText("Friend: " + message + '\n');
                     });
 
-                    tf.setOnAction(e -> {
-                        try {
 
-                            String messageFromServer = tf.getText();
-                            outputToClient.writeUTF(messageFromServer);
-                            outputToClient.flush();
-                            Platform.runLater(() -> {
-                                ta.appendText("Server: " + messageFromServer+"\n");
-                            });
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                    });
                 }
-
-
-            }
-            catch(IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }).start();
 
