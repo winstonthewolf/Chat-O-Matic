@@ -46,17 +46,15 @@ public class ChatClient extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
-
-//                    String messageFromServer = inputFromServer.readUTF();
-
+        //Connect to server and instantiate data input and output streams
+        //Replace localhost with chatServer ip if running on two separate machines
         socket = new Socket("localhost", 8000);
 
 
         inputFromServer = new DataInputStream(socket.getInputStream());
         outputToServer = new DataOutputStream(socket.getOutputStream());
 
-
+        //Chat field functionality
         tf.setOnAction(e -> {
             try {
 
@@ -64,17 +62,16 @@ public class ChatClient extends Application {
                 outputToServer.writeUTF(message);
                 outputToServer.flush();
 
-
-                //BufferedReader outputFromServer = new BufferedReader(new InputStreamReader(tf.getText()));
-
-
                 Platform.runLater(()->{
                     ta.appendText("You: " + message + '\n');
                 });
+                tf.clear();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         });
+
+        //Start a thread for reading data from the server
         new Thread(()-> {
             try {
 

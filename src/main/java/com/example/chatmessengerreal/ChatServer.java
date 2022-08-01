@@ -16,7 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
-
+//TODO: Write succinct README page on how to compile and run program remember to note system requirements.v
 public class ChatServer extends Application {
     //Text area for displaying
 
@@ -48,12 +48,17 @@ public class ChatServer extends Application {
 
         new Thread(()->{
             try {
+                //Start server socket for data transfer
                 ServerSocket serverSocket = new ServerSocket(8000);
-                //Surround with if statement for if serversocket is successful.
+                //Surround with if statement for if serversocket is successful. *Ignore this comment if you're not me*
+
+                //Display Date and time of when server starts
                 Platform.runLater(()-> {
                     ta.appendText("Server started at "+ new Date() + '\n');
                 });
                 Socket socket = serverSocket.accept();
+
+                //textfield action
                 tf.setOnAction(e -> {
                     try {
 
@@ -64,21 +69,21 @@ public class ChatServer extends Application {
                         Platform.runLater(() -> {
                             ta.appendText("Server: " + messageFromServer+"\n");
                         });
+                        tf.clear();
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
 
                 });
-                //IMPORTANT FOR TOMORROW: How do I implement DataInputStream so that I am able to use readUTF from a different thread.
+
+
+                //Read input from client and display it on the screen
                 while(true) {
                     DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
                     String message = inputFromClient.readUTF();
-                    //outputToClient.writeUTF(message);
                     Platform.runLater(() -> {
                         ta.appendText("Friend: " + message + '\n');
                     });
-
-
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
