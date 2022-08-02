@@ -23,10 +23,10 @@ Once you do this for both programs run configurations, you can start the server 
 You should now be able to send a message to eachother from each application. Congrats.
 
 If you just want to run it from the command line without an IDE go to the folder where the chatClient.java and chatServer are located 
-and from there compile them using '/path/to/java-1.17.0-openjdk-amd64/bin/javac --module-path /path/to/javafx-sdk-18.0.1/lib --add-modules javafx.controls ChatServer.java'
+and from there compile them using `/path/to/java-1.17.0-openjdk-amd64/bin/javac --module-path /path/to/javafx-sdk-18.0.1/lib --add-modules javafx.controls ChatServer.java`
 changing the chatServer.java file for the chatClient afterwards and running it again to compile the chatClient.class
 
 After that run the class files as so, replacing the chatServer file for the chatClient class file after running the chatServer. You will need to run each in a seperate terminal.
-'/path/to/java-1.17.0-openjdk-amd64/bin/java --module-path /path/to/javafx-sdk-18.0.1/lib --add-modules javafx.controls ChatServer'
+`/path/to/java-1.17.0-openjdk-amd64/bin/java --module-path /path/to/javafx-sdk-18.0.1/lib --add-modules javafx.controls ChatServer`
 
 End.
